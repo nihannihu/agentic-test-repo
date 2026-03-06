@@ -3,11 +3,13 @@ const User = require("../models/User");
 const login = async (req, res) => {
     const { email, password } = req.body;
 
-    // BUG: We are not checking if "password" exists before trying to use it.
-    // If req.body.password is missing, password.length will throw an error.
+    if (!password) {
+        return res.status(400).json({ error: "Password required" });
+    }
+
     console.log(`Attempting login for: ${email}`);
 
-    if (password.length < 6) { 
+    if (password.length < 5) {
         return res.status(400).json({ error: "Password too short" });
     }
 
